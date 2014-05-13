@@ -34,7 +34,10 @@ class _WinXRayConfigurePanelWidget(_ConfigurePanelWidget):
     def _initUI(self, settings):
         # Widgets
         self._brw_exe = FileBrowseWidget()
-        self._brw_exe.setNameFilter('Application files (*.exe)')
+        if os.name == 'nt':
+            self._brw_exe.setNameFilter('Application files (*.exe)')
+        else:
+            self._brw_exe.setNameFilter('Application files (*)')
 
         # Layouts
         layout = _ConfigurePanelWidget._initUI(self, settings)
