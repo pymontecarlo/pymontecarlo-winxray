@@ -1,0 +1,11 @@
+syntax: glob
+
+*.bak
+*.pyc
+*.egg-info
+app/*.zip
+
+syntax: regexp
+^lib
+^dist
+^build
