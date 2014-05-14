@@ -43,7 +43,7 @@ from pymontecarlo.options.model import \
     (ELASTIC_CROSS_SECTION, IONIZATION_CROSS_SECTION, IONIZATION_POTENTIAL,
      RANDOM_NUMBER_GENERATOR, DIRECTION_COSINE, ENERGY_LOSS,
      MASS_ABSORPTION_COEFFICIENT)
-from pymontecarlo.util.expander import ExpanderSingleDetectorSameOpening
+from pymontecarlo.util.expander import OptionsExpanderSingleDetectorSameOpening
 
 # Globals and constants variables.
 
@@ -88,7 +88,7 @@ class Converter(_Converter):
     def __init__(self):
         _Converter.__init__(self)
 
-        self._expander = ExpanderSingleDetectorSameOpening(self.DETECTORS)
+        self._expander = OptionsExpanderSingleDetectorSameOpening(self.DETECTORS)
 
     def _convert_beam(self, options):
         if type(options.beam) is PencilBeam:
