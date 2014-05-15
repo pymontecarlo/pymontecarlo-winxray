@@ -30,14 +30,13 @@ from pyxray.transition import from_string
 # Local modules.
 from pymontecarlo.program.importer import Importer as _Importer
 from pymontecarlo.results.result import \
-    (
-    PhotonIntensityResult,
-    PhotonSpectrumResult,
-    PhotonDepthResult,
-    ElectronFractionResult,
-    TimeResult,
-    create_intensity_dict,
-    ShowersStatisticsResult,
+    (PhotonKey,
+     PhotonIntensityResult,
+     PhotonSpectrumResult,
+     PhotonDepthResult,
+     ElectronFractionResult,
+     TimeResult,
+     ShowersStatisticsResult,
     )
 from pymontecarlo.options.detector import \
     (
@@ -65,7 +64,6 @@ from winxraytools.results.XRaySpectrum import \
     (ENERGY as WXRSPC_ENERGY,
      TOTAL as WXRSPC_TOTAL,
      BACKGROUND as WXRSPC_BACKGROUND)
-from pymontecarlo.results.result import EMITTED, GENERATED, NOFLUORESCENCE, TOTAL
 
 class Importer(_Importer):
 
@@ -105,13 +103,11 @@ class Importer(_Importer):
             data = wxrresult.intensities[z][line]
             transition = from_string("%s %s" % (symbol(z), line))
 
-            gt = list(map(mul, data[WXRGENERATED], [factor] * 2))
-            et = list(map(mul, data[WXREMITTED], [factor] * 2))
+            gnf = list(map(mul, data[WXRGENERATED], [factor] * 2))
+            enf = list(map(mul, data[WXREMITTED], [factor] * 2))
 
-            tmpints = create_intensity_dict(transition,
-                                            gnf=gt, gt=gt,
-                                            enf=et, et=et)
-            intensities.update(tmpints)
+            intensities[PhotonKey(transition, False, PhotonKey.P)] = gnf
+            intensities[PhotonKey(transition, True, PhotonKey.P)] = enf
 
         return PhotonIntensityResult(intensities)
 
@@ -134,9 +130,10 @@ class Importer(_Importer):
 
     def _import_photondepth(self, options, name, detector, path):
         wxrresult = CharateristicPhirhoz(path)
-        distributions = {}
 
-        def _extract(data, key, dists):
+        def _extract(data, absorption):
+            distributions = {}
+
             for z in data:
                 for xrayline in data[z]:
                     transition = from_string(symbol(z) + " " + xrayline)
@@ -150,12 +147,14 @@ class Importer(_Importer):
                     # The order must be reversed
                     dist = dist[::-1]
 
-                    dists.setdefault(transition, {}).setdefault(key, {})
-                    dists[transition][key][NOFLUORESCENCE] = dist
-                    dists[transition][key][TOTAL] = dist
+                    key = PhotonKey(transition, absorption, PhotonKey.P)
+                    distributions[key] = dist
 
-        _extract(wxrresult.getPhirhozs('Generated'), GENERATED, distributions)
-        _extract(wxrresult.getPhirhozs('Emitted'), EMITTED, distributions)
+            return distributions
+
+        distributions = {}
+        distributions.update(_extract(wxrresult.getPhirhozs('Generated'), False))
+        distributions.update(_extract(wxrresult.getPhirhozs('Emitted'), True))
 
         return PhotonDepthResult(distributions)
 
