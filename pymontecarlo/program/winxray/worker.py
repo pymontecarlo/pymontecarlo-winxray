@@ -60,10 +60,9 @@ class Worker(_Worker):
 
         self._status = 'Running WinX-Ray'
 
-        self._process = subprocess.Popen(args, stdout=subprocess.PIPE,
-                                         cwd=self._executable_dir)
-        self._process.wait()
-        self._process = None
+        self._create_process(args, stdout=subprocess.PIPE,
+                             cwd=self._executable_dir)
+        self._join_process()
 
         logging.debug('WinX-Ray ended')
 
