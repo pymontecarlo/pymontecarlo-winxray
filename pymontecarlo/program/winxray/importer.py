@@ -39,10 +39,7 @@ from pymontecarlo.results.result import \
      ShowersStatisticsResult,
     )
 from pymontecarlo.options.detector import \
-    (
-#     BackscatteredElectronEnergyDetector,
-#     BackscatteredElectronPolarAngularDetector,
-     PhotonDepthDetector,
+    (PhotonDepthDetector,
      PhotonIntensityDetector,
      PhotonSpectrumDetector,
      ElectronFractionDetector,
