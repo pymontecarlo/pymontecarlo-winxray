@@ -40,6 +40,7 @@ from pymontecarlo.options.detector import \
      PhotonSpectrumDetector,
      ElectronFractionDetector,
      TimeDetector,
+     ShowersStatisticsDetector,
      equivalent_opening,
      )
 from pymontecarlo.options.model import \
@@ -85,6 +86,7 @@ class Exporter(_Exporter):
             self._detector_electron_fraction
         self._detector_exporters[TimeDetector] = \
             self._detector_time
+        self._detector_exporters[ShowersStatisticsDetector] = self._export_dummy
 
         self._limit_exporters[ShowersLimit] = self._limit_showers
 
