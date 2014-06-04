@@ -108,7 +108,8 @@ class Exporter(_Exporter):
     def _export(self, options, dirpath, *args, **kwargs):
         wxrops = self.export_wxroptions(options, dirpath)
 
-        filepath = os.path.join(dirpath, options.name + '.wxc')
+        name = options.name.replace(' ', '_') # WinXRay does not support space in name
+        filepath = os.path.join(dirpath, name + '.wxc')
         wxrops.write(filepath)
 
         return filepath
