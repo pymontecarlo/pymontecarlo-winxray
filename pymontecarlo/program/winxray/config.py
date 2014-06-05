@@ -18,6 +18,8 @@ __license__ = "GPL v3"
 
 # Standard library modules.
 import os
+import sys
+import glob
 
 # Third party modules.
 
@@ -47,15 +49,21 @@ class _WinXRayProgram(Program):
             raise AssertionError("Missing 'exe' option in 'winxray' section of settings")
 
         exe = settings.winxray.exe
-        if not os.path.isfile(exe):
+        if os.path.splitext(exe)[1] != '.app' and not os.path.isfile(exe):
             raise AssertionError("Specified WinXRay executable (%s) does not exist" % exe)
         if not os.access(exe, os.X_OK):
             raise AssertionError("Specified WinXRay executable (%s) is not executable" % exe)
 
     def autoconfig(self, programs_path):
-        exe_path = os.path.join(programs_path, self.alias, 'WinXRay.exe')
-        if not os.path.exists(exe_path):
-            return False
+        if sys.platform == 'linux':
+            exe_path = '/usr/bin/winxray'
+            if not os.path.exists(exe_path):
+                return False
+        else:
+            paths = glob.glob(os.path.join(programs_path, self.alias, 'winxray*'))
+            if len(paths) != 1:
+                return False
+            exe_path = paths[0]
 
         settings = get_settings()
         settings.add_section('winxray').exe = exe_path
