@@ -52,4 +52,14 @@ class _WinXRayProgram(Program):
         if not os.access(exe, os.X_OK):
             raise AssertionError("Specified WinXRay executable (%s) is not executable" % exe)
 
+    def autoconfig(self, programs_path):
+        exe_path = os.path.join(programs_path, self.alias, 'WinXRay.exe')
+        if not os.path.exists(exe_path):
+            return False
+
+        settings = get_settings()
+        settings.add_section('winxray').exe = exe_path
+
+        return True
+
 program = _WinXRayProgram()
