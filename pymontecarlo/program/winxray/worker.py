@@ -20,7 +20,12 @@ __license__ = "GPL v3"
 
 # Standard library modules.
 import os
-import ntpath
+import sys
+try:
+    from ntpath import normcase
+except ImportError:
+    def normcase(s):
+        return s.replace('/', '\\').lower()
 import subprocess
 import logging
 from zipfile import ZipFile
@@ -43,18 +48,21 @@ class Worker(_Worker):
         _Worker.__init__(self, program)
 
         self._executable = get_settings().winxray.exe
-        if not os.path.isfile(self._executable):
-            raise IOError('WinX-Ray executable (%s) cannot be found' % self._executable)
         logging.debug('WinX-Ray executable: %s', self._executable)
 
         self._executable_dir = os.path.dirname(self._executable)
         logging.debug('WinX-Ray directory: %s', self._executable_dir)
 
     def run(self, options, outputdir, workdir, *args, **kwargs):
+        if sys.platform == 'darwin':
+            self.create(options, outputdir, *args, **kwargs)
+            raise NotImplementedError("Simulations with WinXRay cannot be directly run. "
+                "The .wxc file was created in the output directory.")
+
         wxcfilepath = self.create(options, workdir)
 
         # Launch
-        wxcfilepath = ntpath.normcase(wxcfilepath) # Requires \\ instead of /
+        wxcfilepath = normcase(wxcfilepath) # Requires \\ instead of /
         args = [self._executable, wxcfilepath]
         logging.debug('Launching %s', ' '.join(args))
 
