@@ -36,8 +36,9 @@ from pymontecarlo.program.winxray.worker import Worker
 class _WinXRayProgram(Program):
 
     def __init__(self):
+        autorun = False if sys.platform == 'darwin' else True
         Program.__init__(self, 'WinXRay', 'winxray', Converter, Worker,
-                          Exporter, Importer)
+                          Exporter, Importer, autorun=autorun)
 
     def validate(self):
         settings = get_settings()
