@@ -21,7 +21,7 @@ from pymontecarlo.testcase import TestCase
 from pymontecarlo.program.winxray.importer import Importer
 from pymontecarlo.options.options import Options
 from pymontecarlo.options.detector import \
-    (PhotonIntensityDetector, PhotonDepthDetector, ElectronFractionDetector,
+    (PhotonIntensityDetector, PhiZDetector, ElectronFractionDetector,
      TimeDetector, PhotonSpectrumDetector, ShowersStatisticsDetector)
 from pymontecarlo.options.limit import ShowersLimit
 
@@ -38,7 +38,7 @@ class TestImporter(TestCase):
         self.ops.detectors['fraction'] = ElectronFractionDetector()
         self.ops.detectors['time'] = TimeDetector()
         self.ops.detectors['showers'] = ShowersStatisticsDetector()
-        self.ops.detectors['prz'] = PhotonDepthDetector((0, 1), (2, 3), 100)
+        self.ops.detectors['prz'] = PhiZDetector((0, 1), (2, 3), 100)
         self.ops.detectors['spectrum'] = \
             PhotonSpectrumDetector((0, 1), (2, 3), 500, (0, 1000))
 
@@ -80,10 +80,9 @@ class TestImporter(TestCase):
         result = self.results['showers']
         self.assertEqual(1000, result.showers)
 
-    def test_detector_photondepth(self):
+    def test_detector_phi_z(self):
         result = self.results['prz']
-        self.assertEqual(3, len(list(result.iter_transitions())))
-        self.assertEqual(1, len(list(result.iter_transitions(absorption=False))))
+        self.assertEqual(3, len(list(result.iter_distributions())))
 
         prz = result.get('Al Ka1')
         self.assertAlmostEqual(0.0, prz[0, 0], 4)

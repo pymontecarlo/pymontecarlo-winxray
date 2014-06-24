@@ -35,7 +35,7 @@ from pymontecarlo.options.detector import \
     (_DelimitedDetector,
      BackscatteredElectronEnergyDetector,
      BackscatteredElectronPolarAngularDetector,
-     PhotonDepthDetector,
+     PhiZDetector,
      PhotonIntensityDetector,
      PhotonSpectrumDetector,
      ElectronFractionDetector,
@@ -76,8 +76,8 @@ class Exporter(_Exporter):
             self._detector_backscattered_electron_energy
         self._detector_exporters[BackscatteredElectronPolarAngularDetector] = \
             self._detector_backscattered_electron_polar_angular
-        self._detector_exporters[PhotonDepthDetector] = \
-            self._detector_photondetector
+        self._detector_exporters[PhiZDetector] = \
+            self._detector_phi_z
         self._detector_exporters[PhotonIntensityDetector] = \
             self._detector_photon_intensity
         self._detector_exporters[PhotonSpectrumDetector] = \
@@ -238,7 +238,7 @@ class Exporter(_Exporter):
         wxrops.setComputeBSEAngular(True)
         wxrops.setNbBSEAngular(detector.channels)
 
-    def _detector_photondetector(self, options, name, detector, wxrops):
+    def _detector_phi_z(self, options, name, detector, wxrops):
         wxrops.setXrayCompute(True)
         wxrops.setXrayComputeCharacteristic(True)
         wxrops.setNumberFilm(detector.channels)

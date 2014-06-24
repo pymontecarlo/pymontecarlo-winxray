@@ -31,7 +31,7 @@ from pymontecarlo.options.material import Material
 from pymontecarlo.options.geometry import Substrate
 from pymontecarlo.options.limit import ShowersLimit
 from pymontecarlo.options.detector import \
-    (PhotonDepthDetector,
+    (PhiZDetector,
      PhotonIntensityDetector,
      PhotonSpectrumDetector,
      ElectronFractionDetector,
@@ -52,7 +52,7 @@ class Converter(_Converter):
     MATERIALS = [Material]
     BEAMS = [GaussianBeam]
     GEOMETRIES = [Substrate]
-    DETECTORS = [PhotonDepthDetector,
+    DETECTORS = [PhiZDetector,
                  PhotonIntensityDetector,
                  PhotonSpectrumDetector,
                  ElectronFractionDetector,

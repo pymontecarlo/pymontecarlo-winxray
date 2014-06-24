@@ -33,13 +33,13 @@ from pymontecarlo.results.result import \
     (PhotonKey,
      PhotonIntensityResult,
      PhotonSpectrumResult,
-     PhotonDepthResult,
+     PhiZResult,
      ElectronFractionResult,
      TimeResult,
      ShowersStatisticsResult,
     )
 from pymontecarlo.options.detector import \
-    (PhotonDepthDetector,
+    (PhiZDetector,
      PhotonIntensityDetector,
      PhotonSpectrumDetector,
      ElectronFractionDetector,
@@ -69,7 +69,7 @@ class Importer(_Importer):
 
         self._importers[PhotonIntensityDetector] = self._import_photon_intensity
         self._importers[PhotonSpectrumDetector] = self._import_photon_spectrum
-        self._importers[PhotonDepthDetector] = self._import_photondepth
+        self._importers[PhiZDetector] = self._import_phi_z
         self._importers[ElectronFractionDetector] = \
             self._import_electron_fraction
         self._importers[TimeDetector] = self._import_time
@@ -125,7 +125,7 @@ class Importer(_Importer):
 
         return PhotonSpectrumResult(total, background)
 
-    def _import_photondepth(self, options, name, detector, path):
+    def _import_phi_z(self, options, name, detector, path):
         wxrresult = CharateristicPhirhoz(path)
 
         def _extract(data, absorption):
@@ -153,7 +153,7 @@ class Importer(_Importer):
         distributions.update(_extract(wxrresult.getPhirhozs('Generated'), False))
         distributions.update(_extract(wxrresult.getPhirhozs('Emitted'), True))
 
-        return PhotonDepthResult(distributions)
+        return PhiZResult(distributions)
 
     def _import_electron_fraction(self, options, name, detector, path):
         wxrresult = BseResults(path)

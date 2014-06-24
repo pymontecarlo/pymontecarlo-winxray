@@ -20,6 +20,7 @@ import shutil
 from pymontecarlo.testcase import TestCase
 
 from pymontecarlo.options.options import Options
+from pymontecarlo.options.material import Material
 from pymontecarlo.options.detector import TimeDetector
 from pymontecarlo.options.limit import ShowersLimit
 
@@ -38,6 +39,7 @@ class TestWorker(TestCase):
         self.workdir = tempfile.mkdtemp()
 
         ops = Options('test')
+        ops.geometry.body.material = Material.pure(79)
         ops.detectors['time'] = TimeDetector()
         ops.limits.add(ShowersLimit(1))
         self.ops = Converter().convert(ops)[0]
