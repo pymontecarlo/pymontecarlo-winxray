@@ -21,11 +21,6 @@ __license__ = "GPL v3"
 # Standard library modules.
 import os
 import sys
-try:
-    from ntpath import normcase
-except ImportError:
-    def normcase(s):
-        return s.replace('/', '\\').lower()
 import subprocess
 import logging
 from zipfile import ZipFile
@@ -62,8 +57,7 @@ class Worker(_Worker):
         wxcfilepath = self.create(options, workdir)
 
         # Launch
-        wxcfilepath = normcase(wxcfilepath) # Requires \\ instead of /
-        args = [self._executable, wxcfilepath]
+        args = [self._executable, wxcfilepath.replace('/', '\\')]
         logging.debug('Launching %s', ' '.join(args))
 
         self._status = 'Running WinX-Ray'
