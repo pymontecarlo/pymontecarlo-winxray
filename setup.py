@@ -14,16 +14,10 @@ from setuptools import setup, find_packages
 
 # Local modules.
 from pymontecarlo.util.dist.command import clean
-try:
-    from pymontecarlo.program.winxray.util.dist.command import bdist_deb_program
-except ImportError:
-    bdist_deb_program = None
 
 # Globals and constants variables.
 
 cmdclass = {'clean': clean}
-if bdist_deb_program is not None:
-    cmdclass['bdist_deb_program'] = bdist_deb_program
 
 setup(name="pyMonteCarlo-WinXRay",
       version='0.1',
