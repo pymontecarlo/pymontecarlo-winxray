@@ -37,7 +37,7 @@ setup(name="pyMonteCarlo-WinXRay",
 
       packages=find_packages(),
 
-      install_requires=['pyWinxrayTools', 'pyMonteCarlo', 'PySide', 'pyxray'],
+      install_requires=['pyWinxrayTools', 'pyMonteCarlo', 'pyxray==0.1'],
 
       cmdclass=cmdclass,
 
